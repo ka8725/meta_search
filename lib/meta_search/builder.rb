@@ -3,7 +3,6 @@ require 'meta_search/model_compatibility'
 require 'meta_search/exceptions'
 require 'meta_search/where'
 require 'meta_search/utility'
-require 'pry'
 
 module MetaSearch
   # Builder is the workhorse of MetaSearch -- it is the class that handles dynamically generating
