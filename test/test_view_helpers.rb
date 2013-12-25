@@ -56,7 +56,7 @@ class TestViewHelpers < ActionView::TestCase
     end
 
     should "use the default localization for predicates" do
-      assert_match /Name isn't null/, @f1.label(:name_is_not_null)
+      assert_match /Name isn\&\#39\;t null/, @f1.label(:name_is_not_null)
     end
 
     context "in the Flanders locale" do
@@ -98,7 +98,7 @@ class TestViewHelpers < ActionView::TestCase
       end
       assert_match /<option selected="selected" value="2">February<\/option>/, html
       assert_dom_equal '<input id="search_name_contains" name="search[name_contains]" ' +
-                       'size="30" type="text" value="bacon" />',
+                       'type="text" value="bacon" />',
                         @f.text_field(:name_contains)
     end
   end
@@ -211,11 +211,11 @@ class TestViewHelpers < ActionView::TestCase
     end
 
     should "return an array of check boxes without a block" do
-     assert @f.collection_checks(:id_in, Company.to_a, :id, :name).all?{|c| c.is_a?(MetaSearch::Check)}
+     assert @f.collection_checks(:id_in, Company.all, :id, :name).all?{|c| c.is_a?(MetaSearch::Check)}
     end
 
     should "generate the expected HTML with a block" do
-      @f.collection_checks(:id_in, Company.to_a, :id, :name) do |c|
+      @f.collection_checks(:id_in, Company.all, :id, :name) do |c|
         concat render :to => :string, :inline => "<p><%= c.label %> <%= c.box %></p>", :locals => {:c => c}
       end
       assert_dom_equal output_buffer,
