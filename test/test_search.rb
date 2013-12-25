@@ -124,7 +124,7 @@ class TestSearch < Test::Unit::TestCase
    {:name => 'Company as a Relation', :object => Company.all}].each do |object|
     context_a_search_against object[:name], object[:object] do
       should "have a relation attribute which is an ActiveRecord::Relation" do
-        assert_equal ActiveRecord::Relation, @s.relation.class
+        assert_equal ActiveRecord::Relation::ActiveRecord_Relation_Company, @s.relation.class
       end
 
       should "have a base attribute which is a Class inheriting from ActiveRecord::Base" do
