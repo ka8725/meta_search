@@ -12,7 +12,6 @@ class TestViewHelpers < ActionView::TestCase
   extend Shoulda::Macros
   include Shoulda::Helpers
 
-
   def self.router
     @router ||= begin
       router = ActionDispatch::Routing::RouteSet.new
@@ -41,10 +40,6 @@ class TestViewHelpers < ActionView::TestCase
     @controller.view_context_class.class_eval do
       include router.url_helpers
     end
-  end
-
-  def test_form_for_helper
-
   end
 
   context "A search against Company and a search against Developer" do
