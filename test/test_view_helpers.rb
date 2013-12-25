@@ -205,11 +205,11 @@ class TestViewHelpers < ActionView::TestCase
     end
 
     should "return an array of check boxes without a block" do
-     assert @f.collection_checks(:id_in, Company.all, :id, :name).all?{|c| c.is_a?(MetaSearch::Check)}
+     assert @f.collection_checks(:id_in, Company.to_a, :id, :name).all?{|c| c.is_a?(MetaSearch::Check)}
     end
 
     should "generate the expected HTML with a block" do
-      @f.collection_checks(:id_in, Company.all, :id, :name) do |c|
+      @f.collection_checks(:id_in, Company.to_a, :id, :name) do |c|
         concat render :to => :string, :inline => "<p><%= c.label %> <%= c.box %></p>", :locals => {:c => c}
       end
       assert_dom_equal output_buffer,
@@ -273,7 +273,7 @@ class TestViewHelpers < ActionView::TestCase
 
     should "sort results as expected" do
       assert_equal Developer.order('salary ASC, name ASC'),
-                   @s.all
+                   @s.relation.to_a
     end
   end
 
@@ -297,8 +297,8 @@ class TestViewHelpers < ActionView::TestCase
     end
 
     should "return expected results" do
-      assert_equal Developer.order('name ASC, salary ASC').all,
-                   @s.all
+      assert_equal Developer.order('name ASC, salary ASC').to_a,
+                   @s.relation.to_a
     end
   end
 
@@ -432,12 +432,12 @@ class TestViewHelpers < ActionView::TestCase
       end
     end
   end
-  
+
   describe "Any search" do
     setup do
       @s = Company.search(:name_contains => 'foo')
     end
-    
+
     should "not modify passed-in parameters" do
       params = { :controller => 'companies' }
       sort_link(@s, :name, params)

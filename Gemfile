@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 # Don't do a "gemspec" here. Seriously. It jacks up Jeweler.
 
@@ -10,5 +10,6 @@ gem 'rake'
 gem 'sqlite3'
 
 group :development do
+  gem 'pry'
   gem "shoulda", "~> 2.11"
 end
