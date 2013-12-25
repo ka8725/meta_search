@@ -6,6 +6,13 @@ class TestViewHelpers < ActionView::TestCase
   tests MetaSearch::Helpers::FormHelper
   include MetaSearch::Helpers::UrlHelper
 
+  include Shoulda::InstanceMethods
+  extend Shoulda::ClassMethods
+  include Shoulda::Assertions
+  extend Shoulda::Macros
+  include Shoulda::Helpers
+
+
   def self.router
     @router ||= begin
       router = ActionDispatch::Routing::RouteSet.new
@@ -36,7 +43,11 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A search against Company and a search against Developer" do
+  def test_form_for_helper
+
+  end
+
+  context "A search against Company and a search against Developer" do
     setup do
       @s1 = Company.search
       @s2 = Developer.search
@@ -53,7 +64,7 @@ class TestViewHelpers < ActionView::TestCase
       assert_match /Name isn't null/, @f1.label(:name_is_not_null)
     end
 
-    describe "in the Flanders locale" do
+    context "in the Flanders locale" do
       setup do
         I18n.locale = :flanders
       end
@@ -74,7 +85,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A previously-filled search form" do
+  context "A previously-filled search form" do
     setup do
       @s = Company.search
       @s.created_at_gte = [2001, 2, 3, 4, 5]
@@ -97,7 +108,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A form using mutiparameter_field with default size option" do
+  context "A form using mutiparameter_field with default size option" do
     setup do
       @s = Developer.search
       form_for @s do |f|
@@ -117,7 +128,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A form using checks with three choices" do
+  context "A form using checks with three choices" do
     setup do
       @s = Company.search
       form_for @s do |f|
@@ -156,7 +167,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A form using checks with three choices and a previous selection" do
+  context "A form using checks with three choices and a previous selection" do
     setup do
       @s = Company.search
       @s.id_in = [1, 3]
@@ -196,7 +207,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A form using collection_checks with companies" do
+  context "A form using collection_checks with companies" do
     setup do
       @s = Company.search
       form_for @s do |f|
@@ -222,7 +233,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A company search form sorted by name ascending" do
+  context "A company search form sorted by name ascending" do
     setup do
       @s = Company.search
       @s.meta_sort = 'name.asc'
@@ -241,7 +252,7 @@ class TestViewHelpers < ActionView::TestCase
                       @f.sort_link(:created_at, :controller => 'companies')
     end
 
-    describe "and a localization" do
+    context "and a localization" do
       setup do
         I18n.locale = :es
       end
@@ -257,7 +268,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A developer search form sorted by a custom sort method" do
+  context "A developer search form sorted by a custom sort method" do
     setup do
       @s = Developer.search
       @s.meta_sort = 'salary_and_name.asc'
@@ -277,7 +288,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A developer search form sorted by multiple columns" do
+  context "A developer search form sorted by multiple columns" do
     setup do
       @s = Developer.search
       @s.meta_sort = 'name_and_salary.asc'
@@ -302,7 +313,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A company search form with an alternate search_key" do
+  context "A company search form with an alternate search_key" do
     setup do
       @s = Company.search({}, :search_key => 'searchy_mcsearchhead')
       form_for @s do |f|
@@ -316,7 +327,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A company search" do
+  context "A company search" do
     setup do
       @s = Company.search
     end
@@ -336,7 +347,7 @@ class TestViewHelpers < ActionView::TestCase
         sort_link(@s, :name, :controller => 'companies', :default_order => :something_else)
     end
 
-    describe "sorted by name ascending" do
+    context "sorted by name ascending" do
       setup do
         @s.meta_sort = 'name.asc'
       end
@@ -366,7 +377,7 @@ class TestViewHelpers < ActionView::TestCase
           sort_link(@s, :name, :controller => 'companies', :default_order => :something_else)
       end
 
-      describe "with existing search options" do
+      context "with existing search options" do
         setup do
           @s.name_contains = 'a'
         end
@@ -378,7 +389,7 @@ class TestViewHelpers < ActionView::TestCase
       end
     end
 
-    describe "sorted by name descending" do
+    context "sorted by name descending" do
       setup do
         @s.meta_sort = 'name.desc'
       end
@@ -400,12 +411,12 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "A developer search" do
+  context "A developer search" do
     setup do
       @s = Developer.search
     end
 
-    describe "sorted by company name descending" do
+    context "sorted by company name descending" do
       setup do
         @s.meta_sort = 'company_name.desc'
       end
@@ -420,7 +431,7 @@ class TestViewHelpers < ActionView::TestCase
                         sort_link(@s, :created_at, :controller => 'developers')
       end
 
-      describe "with existing search options" do
+      context "with existing search options" do
         setup do
           @s.name_contains = 'a'
         end
@@ -433,7 +444,7 @@ class TestViewHelpers < ActionView::TestCase
     end
   end
 
-  describe "Any search" do
+  context "Any search" do
     setup do
       @s = Company.search(:name_contains => 'foo')
     end
